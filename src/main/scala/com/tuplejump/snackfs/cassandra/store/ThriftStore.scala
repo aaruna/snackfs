@@ -570,9 +570,10 @@ class ThriftStore(configuration: SnackFSConfiguration) extends FileSystemStore {
                 val xr = ring.filter {
                   p =>
                     if (p._2 < p._3) {
-                      p._2 <= token.token && p._3 >= token.token
+                      p._2 <= token.getTokenValue.asInstanceOf[Long] && p._3 >= token.getTokenValue.asInstanceOf[Long]
                     } else {
-                      (p._2 <= token.token && Long.MaxValue >= token.token) || (p._3 >= token.token && Long.MinValue <= token.token)
+                      (p._2 <= token.getTokenValue.asInstanceOf[Long] && Long.MaxValue >= token.getTokenValue.asInstanceOf[Long]) ||
+                        (p._3 >= token.getTokenValue.asInstanceOf[Long] && Long.MinValue <= token.getTokenValue.asInstanceOf[Long])
                     }
                 }
 

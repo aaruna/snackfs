@@ -24,9 +24,9 @@ object SnackfsBuild extends Build {
 
   lazy val VERSION = "0.6.1-EA"
 
-  lazy val CAS_VERSION = "1.2.12"
+  lazy val CAS_VERSION = "2.1.12"
 
-  lazy val THRIFT_VERSION = "0.7.0"
+  lazy val THRIFT_VERSION = "0.9.1"
 
   lazy val TWITTER_UTIL_VERSION = "6.7.0"
 
@@ -58,8 +58,8 @@ object SnackfsBuild extends Build {
       case x => "org.apache.spark" %% "spark-core" % "0.9.0-incubating"
     }
 
-
-  lazy val dependencies = Seq("org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided",
+  lazy val dependencies = Seq(
+    "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided",
     "org.apache.cassandra" % "cassandra-thrift" % CAS_VERSION intransitive(),
     "org.apache.cassandra" % "cassandra-all" % CAS_VERSION intransitive(),
     "org.apache.thrift" % "libthrift" % THRIFT_VERSION exclude("org.slf4j", "slf4j-api") exclude("javax.servlet", "servlet-api"),
@@ -72,7 +72,8 @@ object SnackfsBuild extends Build {
     "org.scalatest" %% "scalatest" % "1.9.1" % "it,test",
     "org.apache.commons" % "commons-io" % "1.3.2" % "it,test",
     "com.novocode" % "junit-interface" % "0.10" % "it,test",
-    "org.apache.commons" % "commons-lang3" % "3.1" % "it,test"
+    "org.apache.commons" % "commons-lang3" % "3.1" % "it,test",
+    "com.github.jbellis" % "jamm" % "0.3.0" % "it,test"
   )
 
   lazy val snackSettings = Project.defaultSettings ++ Seq(
@@ -199,7 +200,7 @@ object SnackfsBuild extends Build {
     val cassandra = jarSource + "org.apache.cassandra/"
     val cassandraRelated = List(cassandra + "cassandra-all/cassandra-all-" + CAS_VERSION + ".jar",
       cassandra + "cassandra-thrift/cassandra-thrift-" + CAS_VERSION + ".jar",
-      jarSource + "org.apache.thrift/libthrift/libthrift-0.7.0.jar",
+      jarSource + "org.apache.thrift/libthrift/libthrift-" + THRIFT_VERSION + ".jar",
       jarSource + "commons-pool/commons-pool/commons-pool-1.6.jar"
     )
 
