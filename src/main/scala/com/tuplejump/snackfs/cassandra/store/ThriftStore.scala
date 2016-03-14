@@ -565,15 +565,15 @@ class ThriftStore(configuration: SnackFSConfiguration) extends FileSystemStore {
 
               //For each block in the file, get the owner node
               inode.blocks.foreach(b => {
-                val token = tf.fromByteArray(ByteBufferUtil.bytes(b.id))
+                val tokenValue = tf.fromByteArray(ByteBufferUtil.bytes(b.id)).getTokenValue.asInstanceOf[Long]
 
                 val xr = ring.filter {
                   p =>
                     if (p._2 < p._3) {
-                      p._2 <= token.getTokenValue.asInstanceOf[Long] && p._3 >= token.getTokenValue.asInstanceOf[Long]
+                      p._2 <= tokenValue && p._3 >= tokenValue
                     } else {
-                      (p._2 <= token.getTokenValue.asInstanceOf[Long] && Long.MaxValue >= token.getTokenValue.asInstanceOf[Long]) ||
-                        (p._3 >= token.getTokenValue.asInstanceOf[Long] && Long.MinValue <= token.getTokenValue.asInstanceOf[Long])
+                      (p._2 <= tokenValue && Long.MaxValue >= tokenValue) ||
+                        (p._3 >= tokenValue && Long.MinValue <= tokenValue)
                     }
                 }
 
