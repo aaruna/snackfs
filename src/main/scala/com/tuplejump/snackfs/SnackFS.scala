@@ -19,18 +19,20 @@
 package com.tuplejump.snackfs
 
 import java.net.URI
+
 import org.apache.hadoop.fs.permission.FsPermission
 import org.apache.hadoop.util.Progressable
 import org.apache.hadoop.conf.Configuration
+
 import scala.concurrent.Await
 import scala.concurrent.duration._
-
 import org.apache.hadoop.fs._
 import com.twitter.logging.Logger
 import java.util.UUID
+
 import com.tuplejump.snackfs.api.model._
 import com.tuplejump.snackfs.fs.model.BlockMeta
-import com.tuplejump.snackfs.cassandra.store.ThriftStore
+import com.tuplejump.snackfs.cassandra.store.{Cql3Store, ThriftStore}
 import com.tuplejump.snackfs.cassandra.partial.FileSystemStore
 import com.tuplejump.snackfs.cassandra.model.SnackFSConfiguration
 
@@ -61,9 +63,9 @@ case class SnackFS() extends FileSystem {
     log.debug("generating required configuration")
     customConfiguration = SnackFSConfiguration.get(configuration)
 
-    store = new ThriftStore(customConfiguration)
+    store = new Cql3Store(customConfiguration)
     atMost = customConfiguration.atMost
-    Await.ready(store.createKeyspace, atMost)
+    Await.result(store.createKeyspace, atMost)
     store.init
 
     log.debug("creating base directory")
@@ -140,7 +142,7 @@ case class SnackFS() extends FileSystem {
       case (b, ips) =>
         val bl = new BlockLocation()
         bl.setHosts(ips.toArray)
-        bl.setNames(ips.map(i => "%s:%s".format(i, customConfiguration.CassandraPort)).toArray)
+        bl.setNames(ips.map(i => "%s:%s".format(i, customConfiguration.CassandraThriftPort)).toArray)
         bl.setOffset(b.offset)
         bl.setLength(b.length)
         bl

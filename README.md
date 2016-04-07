@@ -65,7 +65,8 @@ And with Scala 2.10.3,
 4. It is possible to configure the file system by updating core-site.xml.
    The following properties can be added.
    * snackfs.cassandra.host (default 127.0.0.1)
-   * snackfs.cassandra.port (default 9160)
+   * snackfs.cassandra.thrift.port (default 9160)
+   * snackfs.cassandra.cql.port (default 9042)
    * snackfs.consistencyLevel.write (default QUORUM)
    * snackfs.consistencyLevel.read (default QUORUM)
    * snackfs.keyspace (default snackfs)

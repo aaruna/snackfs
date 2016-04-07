@@ -24,7 +24,7 @@ import org.apache.cassandra.locator.SimpleStrategy
 import org.apache.cassandra.thrift.ConsistencyLevel
 import scala.concurrent.duration._
 
-case class SnackFSConfiguration(CassandraHost: String, CassandraPort: Int,
+case class SnackFSConfiguration(CassandraHost: String, CassandraThriftPort: Int, CassandraCqlPort: Int,
                                 readConsistencyLevel: ConsistencyLevel, writeConsistencyLevel: ConsistencyLevel,
                                 keySpace: String, blockSize: Long, subBlockSize: Long, atMost: FiniteDuration,
                                 replicationFactor: Int, replicationStrategy: String) {
@@ -36,8 +36,9 @@ object SnackFSConfiguration {
   private val REPLICATION_STRATEGY = classOf[SimpleStrategy].getCanonicalName
   private val KEYSPACE = "snackfs"
   private val HOST = "127.0.0.1"
-  private val PORT: Int = 9160
-  private val AT_MOST: Long = 10 * 1000
+  private val THRIFT_PORT: Int = 9160
+  private val CQL_PORT: Int = 9042
+  private val AT_MOST: Long = 100 * 1000
   private val SUB_BLOCK_SIZE: Long =  8 * 1024 * 1024 //8 MB
   private val BLOCK_SIZE: Long = 128 * 1024 * 1024 //128MB
   private val REPLICATION_FACTOR: Int = 3
@@ -46,7 +47,8 @@ object SnackFSConfiguration {
     val cassandraHost = userConf.get("snackfs.cassandra.host")
     val host = optIfNull(cassandraHost, HOST)
 
-    val port = userConf.getInt("snackfs.cassandra.port", PORT)
+    val thriftPort = userConf.getInt("snackfs.cassandra.thrift.port", THRIFT_PORT)
+    val cqlPort = userConf.getInt("snackfs.cassandra.cql.port", CQL_PORT)
 
     val consistencyLevelWrite = userConf.get("snackfs.consistencyLevel.write")
     val writeLevel = getConsistencyLevel(consistencyLevelWrite)
@@ -68,7 +70,7 @@ object SnackFSConfiguration {
     val maxWaitDuration = userConf.getLong("snackfs.waitInterval", AT_MOST)
     val waitDuration = FiniteDuration(maxWaitDuration, MILLISECONDS)
 
-    SnackFSConfiguration(host, port, readLevel, writeLevel, keyspace, blockSize,
+    SnackFSConfiguration(host, thriftPort, cqlPort, readLevel, writeLevel, keyspace, blockSize,
       subBlockSize, waitDuration, replicationFactor, replicationStrategy)
   }
 

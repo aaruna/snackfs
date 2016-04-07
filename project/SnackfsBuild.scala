@@ -64,6 +64,7 @@ object SnackfsBuild extends Build {
     "org.apache.cassandra" % "cassandra-all" % CAS_VERSION intransitive(),
     "org.apache.thrift" % "libthrift" % THRIFT_VERSION exclude("org.slf4j", "slf4j-api") exclude("javax.servlet", "servlet-api"),
     "commons-pool" % "commons-pool" % "1.6",
+    "com.datastax.cassandra" % "cassandra-driver-core" % "3.0.0",
     "com.twitter" % "util-logging" % TWITTER_UTIL_VERSION cross CrossVersion.binaryMapped {
       case "2.9.3" => "2.9.2"
       case "2.10.3" => "2.10"

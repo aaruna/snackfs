@@ -7,8 +7,12 @@
         <value>127.0.0.1</value>
     </property>
     <property>
-        <name>snackfs.cassandra.port</name>
+        <name>snackfs.cassandra.thrift.port</name>
         <value>9160</value>
+    </property>
+    <property>
+        <name>snackfs.cassandra.cql.port</name>
+        <value>9042</value>
     </property>
     <property>
         <name>snackfs.consistencyLevel.write</name>

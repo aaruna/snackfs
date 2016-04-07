@@ -91,7 +91,7 @@ class ThriftStore(configuration: SnackFSConfiguration) extends FileSystemStore {
     val protocolFactory = new TBinaryProtocol.Factory()
     val clientFactory = new AsyncClient.Factory(clientManager, protocolFactory)
 
-    val transport = new TNonblockingSocket(configuration.CassandraHost, configuration.CassandraPort)
+    val transport = new TNonblockingSocket(configuration.CassandraHost, configuration.CassandraThriftPort)
     val client = clientFactory.getAsyncClient(transport)
 
     val ksDef = buildSchema
@@ -131,7 +131,7 @@ class ThriftStore(configuration: SnackFSConfiguration) extends FileSystemStore {
   def init {
     log.debug("initializing thrift store with configuration %s", configuration.toString)
     clientPool = new StackObjectPool[ThriftClientAndSocket](
-      new ClientPoolFactory(configuration.CassandraHost, configuration.CassandraPort,
+      new ClientPoolFactory(configuration.CassandraHost, configuration.CassandraThriftPort,
         configuration.keySpace)) {
 
       override def close() {
