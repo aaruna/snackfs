@@ -51,7 +51,7 @@ object MakeDirectoryCommand extends Command {
         val timestamp = System.currentTimeMillis()
         val iNode = INode(user, user, filePermission, FileType.DIRECTORY, null, timestamp)
         log.debug("Creating directory for path %s", filePath)
-        Await.ready(store.storeINode(filePath, iNode), atMost)
+        Await.result(store.storeINode(filePath, iNode), atMost)
     }
     result
   }

@@ -34,9 +34,9 @@ object RenameCommand extends Command {
 
   private def renameINode(store: FileSystemStore, originalPath: Path, updatedPath: Path, iNode: INode, atMost: FiniteDuration) = {
     log.debug("deleting existing iNode %s", originalPath)
-    Await.ready(store.deleteINode(originalPath), atMost)
+    Await.result(store.deleteINode(originalPath), atMost)
     log.debug("storing iNode %s", updatedPath)
-    Await.ready(store.storeINode(updatedPath, iNode), atMost)
+    Await.result(store.storeINode(updatedPath, iNode), atMost)
   }
 
   private def renameDir(store: FileSystemStore, src: Path, dst: Path, atMost: FiniteDuration) = {

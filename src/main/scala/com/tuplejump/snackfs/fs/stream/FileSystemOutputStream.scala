@@ -90,7 +90,7 @@ case class FileSystemOutputStream(store: FileSystemStore, path: Path,
     if (position != 0) {
       val subBlockMeta = SubBlockMeta(UUIDGen.getTimeUUID, subBlockOffset, position)
       log.debug("storing subblock")
-      Await.ready(store.storeSubBlock(blockId, subBlockMeta, ByteBuffer.wrap(outBuffer)), atMost)
+      Await.result(store.storeSubBlock(blockId, subBlockMeta, ByteBuffer.wrap(outBuffer)), atMost)
 
       subBlockOffset += position
       bytesWrittenToBlock += position
@@ -110,7 +110,7 @@ case class FileSystemOutputStream(store: FileSystemStore, path: Path,
     val iNode = INode(user, user, permissions, FileType.FILE, blocksMeta, timestamp)
 
     log.debug("storing/updating block details for INode at %s", path)
-    Await.ready(store.storeINode(path, iNode), atMost)
+    Await.result(store.storeINode(path, iNode), atMost)
 
     blockOffset += subBlockLengths.asInstanceOf[Int]
     subBlocksMeta = List()

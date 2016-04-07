@@ -82,7 +82,7 @@ object CreateFileCommand extends Command {
         val permissions = FsPermission.getDefault
         val timestamp = System.currentTimeMillis()
         val iNode = INode(user, user, permissions, FileType.FILE, List(), timestamp)
-        Await.ready(store.storeINode(filePath, iNode), atMost)
+        Await.result(store.storeINode(filePath, iNode), atMost)
 
         val fileStream = new FileSystemOutputStream(store, filePath, blockSize, subBlockSize, bufferSize, atMost)
         val fileDataStream = new FSDataOutputStream(fileStream, statistics)
@@ -91,7 +91,7 @@ object CreateFileCommand extends Command {
       }
 
       finally {
-        store.releaseFileLock(filePath)
+        Await.result(store.releaseFileLock(filePath), atMost)
       }
     }
     else {
